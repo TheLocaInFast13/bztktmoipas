@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat en ligne</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .chat-container {
+            width: 400px;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .chat-box {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .input-box {
+            display: flex;
+            gap: 10px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            background: #0056b3;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .user-list {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h2>Choisissez un pseudo</h2>
+        <input type="text" id="username" placeholder="Entrez un pseudo">
+        <button onclick="setUsername()">Valider</button>
+        <div id="chat-section" style="display: none;">
+            <h3>Chat général</h3>
+            <div class="chat-box" id="chat-box"></div>
+            <div class="input-box">
+                <input type="text" id="message" placeholder="Écrivez un message">
+                <button onclick="sendMessage()">Envoyer</button>
+            </div>
+            <h3>Utilisateurs en ligne</h3>
+            <div class="user-list" id="user-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let username = "";
+        let users = [];
+        let messages = [];
+
+        function setUsername() {
+            const input = document.getElementById("username");
+            if (input.value.trim() === "" || users.includes(input.value)) {
+                alert("Pseudo déjà utilisé ou invalide");
+                return;
+            }
+            username = input.value;
+            users.push(username);
+            document.getElementById("chat-section").style.display = "block";
+            input.style.display = "none";
+            document.querySelector("button").style.display = "none";
+            updateUsers();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById("message");
+            if (input.value.trim() === "") return;
+            messages.push(`${username}: ${input.value}`);
+            input.value = "";
+            updateChat();
+        }
+
+        function updateChat() {
+            const chatBox = document.getElementById("chat-box");
+            chatBox.innerHTML = messages.map(msg => `<p>${msg}</p>`).join("");
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function updateUsers() {
+            document.getElementById("user-list").innerHTML = users.map(user => `<p>${user}</p>`).join("");
+        }
+    </script>
+</body>
+</html>
